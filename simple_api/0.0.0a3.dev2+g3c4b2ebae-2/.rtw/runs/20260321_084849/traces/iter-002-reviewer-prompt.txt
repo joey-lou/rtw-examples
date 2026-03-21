@@ -1,0 +1,109 @@
+You are the Reviewer.
+Review work against SUBTASK.md.
+Update SUBTASK.md with findings.
+
+Update `.rtw/runs/20260321_084849/state.json`: read it, set only subtask_status (REVISE|PASSED|BLOCKED) and blocking_reason.
+Preserve all other keys.
+Do NOT summarize or repeat in your response; only edit files.
+Reply with at most one short line.
+
+When updating SUBTASK.md, edit only the existing sections (`# Subtask`, `## Acceptance criteria`, `## Review`). Do not append TASK.md, PLAN.md, duplicate SUBTASK blocks, changed-file listings, or file contents from this prompt into SUBTASK.md.
+
+Required SUBTASK.md post-review shape (follow exactly; copy/paste and fill in):
+
+## Acceptance criteria
+- [x] criterion met
+- [ ] criterion failed — one-line reason
+
+## Review
+Brief findings.
+
+# TASK.md
+# Task: Create a Simple REST API
+
+## Overview
+
+Build a minimal REST API for managing a todo list.
+
+## Requirements
+
+### Functional
+
+- Create a FastAPI-based REST API
+- Implement CRUD operations for "tasks" (not to be confused with devflow tasks)
+- Each task has: id, title, description, completed (boolean), created_at
+- Store data in-memory (dict/list) for simplicity
+
+### Endpoints
+
+- `GET /tasks` - List all tasks
+- `GET /tasks/{id}` - Get single task
+- `POST /tasks` - Create task
+- `PUT /tasks/{id}` - Update task
+- `DELETE /tasks/{id}` - Delete task
+
+### Technical
+
+- Python 3.11+
+- FastAPI with Pydantic models
+- Proper error handling (404 for missing tasks)
+- Return JSON responses
+
+## Constraints
+
+- No database required (in-memory storage is fine)
+- No authentication needed
+- Keep it simple - single file is acceptable
+
+## Success Criteria
+
+- All 5 endpoints work correctly
+- Proper HTTP status codes (200, 201, 404)
+- Clean, readable code
+- Can be tested with curl or similar
+
+
+# PLAN.md
+## Steps
+1. **Dependencies and application skeleton** — Add `requirements.txt` (FastAPI, Uvicorn, and compatible Pydantic stack for Python 3.11+) at the project root, plus a single Python module (e.g. `main.py`) defining the FastAPI app, Pydantic models for tasks (id, title, description, completed, created_at), and an in-memory store structure; app must import and instantiate without errors when dependencies are installed in a venv under the run tmp directory. ✓
+2. **CRUD endpoints and error handling** — Implement `GET /tasks`, `GET /tasks/{id}`, `POST /tasks`, `PUT /tasks/{id}`, and `DELETE /tasks/{id}` with JSON responses, 201 on create, 404 with clear detail when a task id is missing, and sensible 200 responses for successful reads/updates/deletes.
+3. **Verification** — Add a small automated check (e.g. `httpx` + `TestClient`, or a `if __name__ == "__main__":` script with explicit pass/fail prints) at the project root that exercises all endpoints and status codes; run it from a venv in the run tmp directory after `pip install -r requirements.txt`.
+
+## Lessons
+- (none yet)
+
+
+# SUBTASK.md
+# Subtask: CRUD endpoints and error handling
+
+Implement full behavior in **`main.py` at the project workspace root** (`simple_api/0.0.0a3.dev2+g3c4b2ebae-2`). Do not place application code under `.rtw/` or the run directory.
+
+**Behavior (TASK.md):**
+
+- In-memory store: keep using `tasks: dict[int, Task]` (or equivalent) keyed by integer `id`.
+- **GET /tasks** — Return `200` and a JSON array of all tasks (serialize Pydantic models to dicts, e.g. `.model_dump()` with a JSON-friendly `created_at` if needed).
+- **GET /tasks/{id}** — Return `200` and the task JSON; if missing, `404` with JSON body including a clear `detail` string (e.g. FastAPI `HTTPException`).
+- **POST /tasks** — Accept JSON body with at least `title` and `description` (optional `completed` defaulting to `false`). Server assigns monotonic integer `id` and `created_at`. Return `201` and the created task JSON.
+- **PUT /tasks/{id}** — Full or partial update of `title`, `description`, `completed` as appropriate; return `200` and updated task JSON; missing id → `404` with `detail`.
+- **DELETE /tasks/{id}** — Remove task; return `200` (per success criteria) with a small JSON payload (e.g. `{"ok": true}` or the deleted task); missing id → `404`.
+
+Use Pydantic v2 models for request/response as needed (e.g. separate create/update schemas so clients cannot set `id`/`created_at` on create). Remove `pass` / TODO stubs from route handlers.
+
+**Disposable verifier (scratch only):** Create `.rtw/runs/20260321_084849/tmp/crud_verify.py` that imports `TestClient` from `starlette.testclient` (or `fastapi.testclient`), imports `app` from `main`, and uses **explicit `if` checks** (not bare `assert`) printing `FAIL: ...` and `sys.exit(1)` on failure; on success print `ALL_CHECKS_PASSED` and exit `0`. The script must exercise: empty list `GET /tasks`; `POST` → `201` and body contains expected fields; `GET` existing → `200`; `GET` missing → `404` with `detail`; `PUT` existing → `200`; `PUT` missing → `404`; `DELETE` existing → `200`; `DELETE` missing → `404`; second `GET /tasks` reflects deletes. Do not add this file to `requirements.txt` (TestClient is available via FastAPI/Starlette already installed).
+
+## Acceptance criteria
+- [ ] In `main.py` at project root, all five routes are implemented (no `pass`/TODO left for these handlers); missing-task paths raise or return `404` with JSON `detail`; `POST /tasks` returns `201`; successful read/update/delete return `200` with JSON.
+- [ ] Symbols to inspect: `main.py` contains `@app.get("/tasks")`, `@app.get("/tasks/{task_id}")` (or `{id}`), `@app.post("/tasks")`, `@app.put("/tasks/{task_id}")`, `@app.delete("/tasks/{task_id}")`, and uses the in-memory `tasks` dict.
+- [ ] Create a venv under `.rtw/runs/20260321_084849/tmp` (e.g. `python3.11 -m venv .rtw/runs/20260321_084849/tmp/.venv`), activate it, `pip install -r requirements.txt` with cwd at project root, then run `python .rtw/runs/20260321_084849/tmp/crud_verify.py` with cwd at project root: **exit code 0** and stdout contains a line exactly `ALL_CHECKS_PASSED`.
+
+
+# Changed files (paths)
+
+
+# File contents
+(no files)
+
+# Iteration 2 of 10
+Outputs: edit `.rtw/runs/20260321_084849/SUBTASK.md`.
+Add a section with the exact heading `## Review` (that line only — not `## Review section` or similar).
+Update `.rtw/runs/20260321_084849/state.json` (preserve other keys).

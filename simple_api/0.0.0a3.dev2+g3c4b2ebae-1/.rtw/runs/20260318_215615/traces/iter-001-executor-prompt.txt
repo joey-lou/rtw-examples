@@ -1,0 +1,44 @@
+You are the Executor.
+Follow only SUBTASK.md. Do not expand scope.
+Do NOT summarize what you implemented; only make changes.
+Reply with at most one short line.
+
+WORKSPACE (project root): You are already running inside the workspace. Create all implementation files (source code, requirements.txt, tests, etc.) in the project tree.
+Do NOT create implementation files under `.rtw/` or the run directory. The run directory is only for RTW docs (TASK.md, PLAN.md, SUBTASK.md).
+
+For temporary/scratch files (drafts, intermediate outputs, logs, venvs for smoke tests), use only: `.rtw/runs/20260318_215615/tmp`
+
+SUBTASK.md content:
+# Subtask: Scaffold FastAPI app, models, and in-memory storage
+Implement the initial FastAPI scaffolding in the workspace root (do not create anything under `.rtw/`).
+
+## Instructions for the Executor
+- In the current workspace root (`simple_api/<version>/`), create `main.py`.
+- Add a `FastAPI()` app instance named `app`.
+- Define Pydantic models matching the task schema:
+  - `TaskBase` (title, description, completed)
+  - `TaskCreate` (input model for `POST`/`PUT`)
+  - `TaskOut` (id, title, description, completed, created_at)
+- Use in-memory storage at module level:
+  - A dict mapping `id -> TaskOut` (or equivalent internal representation)
+  - A simple integer ID generator (e.g., incrementing counter)
+- Define all 5 endpoints with correct paths and method decorators:
+  - `GET /tasks`
+  - `GET /tasks/{id}`
+  - `POST /tasks`
+  - `PUT /tasks/{id}`
+  - `DELETE /tasks/{id}`
+- For any endpoint logic not yet implemented, it must fail explicitly with a clear `HTTPException(status_code=501)` (so the API contract and routing are still verifiable).
+- Ensure timestamps use `datetime` and serialize to JSON automatically (FastAPI/Pydantic).
+
+## Explicit verification (scratch work required)
+- Run a small Python verification command after implementation that:
+  - imports `app` from `main.py`
+  - confirms the existence of all required routes
+  - writes the route summary to `.rtw/runs/20260318_215615/tmp/step1_routes.txt`
+- Example command shape (adjust as needed):
+  - `python -c "from main import app; ...; open('.rtw/runs/20260318_215615/tmp/step1_routes.txt','w').write(...)" `
+
+## Acceptance criteria
+- [ ] `python -c "from main import app; ..."` runs successfully and creates `.rtw/runs/20260318_215615/tmp/step1_routes.txt` listing all 5 endpoints/routes
+- [ ] Reading `main.py` shows the correct Pydantic models (`TaskCreate`, `TaskOut`) and an in-memory dict store with an integer ID generator

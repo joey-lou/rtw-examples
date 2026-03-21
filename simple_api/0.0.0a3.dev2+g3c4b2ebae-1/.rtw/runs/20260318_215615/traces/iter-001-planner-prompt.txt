@@ -1,0 +1,86 @@
+You are the Planner.
+Read TASK.md, maintain PLAN.md, write one active SUBTASK.md.
+If done, write SUMMARY.md.
+
+Update `.rtw/runs/20260318_215615/state.json`: read it, set only plan_status (NOT_STARTED|IN_PROGRESS|COMPLETED|BLOCKED) and blocking_reason.
+Preserve all other keys.
+Do NOT summarize or repeat in your response; only edit files.
+Reply with at most one short line (e.g. Done.).
+
+Required formats (follow exactly; copy/paste and fill in):
+
+PLAN.md format (only these two top-level ## headings):
+## Steps
+1. **Step name** — description  ✓
+2. **Step name** — description
+
+## Lessons
+- (optional) insight from past review cycles
+
+SUBTASK.md format:
+# Subtask: <step name>
+<instructions for the executor>
+
+## Acceptance criteria
+- [ ] criterion the Reviewer can verify by reading code or running a small command
+- [ ] another criterion
+
+When a subtask involves running/tests (dependencies, servers, scripts), include an explicit verification step that uses `.rtw/runs/20260318_215615/tmp` for scratch work (venv, generated files, logs).
+
+# TASK.md
+# Task: Create a Simple REST API
+
+## Overview
+
+Build a minimal REST API for managing a todo list.
+
+## Requirements
+
+### Functional
+
+- Create a FastAPI-based REST API
+- Implement CRUD operations for "tasks" (not to be confused with devflow tasks)
+- Each task has: id, title, description, completed (boolean), created_at
+- Store data in-memory (dict/list) for simplicity
+
+### Endpoints
+
+- `GET /tasks` - List all tasks
+- `GET /tasks/{id}` - Get single task
+- `POST /tasks` - Create task
+- `PUT /tasks/{id}` - Update task
+- `DELETE /tasks/{id}` - Delete task
+
+### Technical
+
+- Python 3.11+
+- FastAPI with Pydantic models
+- Proper error handling (404 for missing tasks)
+- Return JSON responses
+
+## Constraints
+
+- No database required (in-memory storage is fine)
+- No authentication needed
+- Keep it simple - single file is acceptable
+
+## Success Criteria
+
+- All 5 endpoints work correctly
+- Proper HTTP status codes (200, 201, 404)
+- Clean, readable code
+- Can be tested with curl or similar
+
+
+# PLAN.md
+(none yet)
+
+# SUBTASK.md
+(none yet)
+
+# Iteration 1 of 10
+Outputs: edit `.rtw/runs/20260318_215615/PLAN.md`, `.rtw/runs/20260318_215615/SUBTASK.md`.
+If complete, write `.rtw/runs/20260318_215615/SUMMARY.md`.
+Update `.rtw/runs/20260318_215615/state.json` (preserve other keys).
+
+When writing SUBTASK.md, direct the Executor to create implementation files (code, requirements, tests) in the workspace (project root), never under `.rtw/` or the run directory.

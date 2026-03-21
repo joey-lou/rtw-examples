@@ -1,0 +1,1 @@
+Verification passes: `python .rtw/runs/20260318_215615/tmp/verify_api.py` exits `0` and writes the expected `verification_report.json` status sequence.

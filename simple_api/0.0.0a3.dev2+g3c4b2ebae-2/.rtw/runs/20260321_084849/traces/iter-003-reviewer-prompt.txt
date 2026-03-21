@@ -1,0 +1,105 @@
+You are the Reviewer.
+Review work against SUBTASK.md.
+Update SUBTASK.md with findings.
+
+Update `.rtw/runs/20260321_084849/state.json`: read it, set only subtask_status (REVISE|PASSED|BLOCKED) and blocking_reason.
+Preserve all other keys.
+Do NOT summarize or repeat in your response; only edit files.
+Reply with at most one short line.
+
+When updating SUBTASK.md, edit only the existing sections (`# Subtask`, `## Acceptance criteria`, `## Review`). Do not append TASK.md, PLAN.md, duplicate SUBTASK blocks, changed-file listings, or file contents from this prompt into SUBTASK.md.
+
+Required SUBTASK.md post-review shape (follow exactly; copy/paste and fill in):
+
+## Acceptance criteria
+- [x] criterion met
+- [ ] criterion failed — one-line reason
+
+## Review
+Brief findings.
+
+# TASK.md
+# Task: Create a Simple REST API
+
+## Overview
+
+Build a minimal REST API for managing a todo list.
+
+## Requirements
+
+### Functional
+
+- Create a FastAPI-based REST API
+- Implement CRUD operations for "tasks" (not to be confused with devflow tasks)
+- Each task has: id, title, description, completed (boolean), created_at
+- Store data in-memory (dict/list) for simplicity
+
+### Endpoints
+
+- `GET /tasks` - List all tasks
+- `GET /tasks/{id}` - Get single task
+- `POST /tasks` - Create task
+- `PUT /tasks/{id}` - Update task
+- `DELETE /tasks/{id}` - Delete task
+
+### Technical
+
+- Python 3.11+
+- FastAPI with Pydantic models
+- Proper error handling (404 for missing tasks)
+- Return JSON responses
+
+## Constraints
+
+- No database required (in-memory storage is fine)
+- No authentication needed
+- Keep it simple - single file is acceptable
+
+## Success Criteria
+
+- All 5 endpoints work correctly
+- Proper HTTP status codes (200, 201, 404)
+- Clean, readable code
+- Can be tested with curl or similar
+
+
+# PLAN.md
+## Steps
+1. **Dependencies and application skeleton** — Add `requirements.txt` (FastAPI, Uvicorn, and compatible Pydantic stack for Python 3.11+) at the project root, plus a single Python module (e.g. `main.py`) defining the FastAPI app, Pydantic models for tasks (id, title, description, completed, created_at), and an in-memory store structure; app must import and instantiate without errors when dependencies are installed in a venv under the run tmp directory. ✓
+2. **CRUD endpoints and error handling** — Implement `GET /tasks`, `GET /tasks/{id}`, `POST /tasks`, `PUT /tasks/{id}`, and `DELETE /tasks/{id}` with JSON responses, 201 on create, 404 with clear detail when a task id is missing, and sensible 200 responses for successful reads/updates/deletes. ✓
+3. **Verification** — Add a small automated check (e.g. `httpx` + `TestClient`, or a `if __name__ == "__main__":` script with explicit pass/fail prints) at the project root that exercises all endpoints and status codes; run it from a venv in the run tmp directory after `pip install -r requirements.txt`.
+
+## Lessons
+- (none yet)
+
+
+# SUBTASK.md
+# Subtask: Verification
+
+Add **`verify_api.py` at the project workspace root** (`simple_api/0.0.0a3.dev2+g3c4b2ebae-2`). Do not place this file under `.rtw/` or the run directory.
+
+**Behavior:**
+
+- Import `app` from `main` and `TestClient` from `fastapi.testclient` (or `starlette.testclient`).
+- Under `if __name__ == "__main__":`, exercise every endpoint and status code with **explicit `if` checks** (not bare `assert`, so behavior is unchanged under `python -O`): on failure print `FAIL: <reason>` to stderr or stdout and call `sys.exit(1)`; on full success print a line exactly `ALL_CHECKS_PASSED` and exit `0`.
+- Cover at minimum: empty `GET /tasks` → `200` and JSON list; `POST /tasks` with `title`/`description` → `201` and body includes assigned `id`, `created_at`, and fields; `GET /tasks/{id}` existing → `200`; missing id → `404` with JSON containing string `detail`; `PUT /tasks/{id}` partial update → `200`; `PUT` missing → `404`; `DELETE` existing → `200` with JSON; `DELETE` missing → `404`; final `GET /tasks` reflects deletions.
+- Do not add new dependencies to `requirements.txt` (use TestClient from the existing FastAPI/Starlette install).
+
+**Scratch:** Use `.rtw/runs/20260321_084849/tmp` only for a disposable venv (e.g. `python3.11 -m venv .rtw/runs/20260321_084849/tmp/.venv`), logs, or other generated artifacts—not for `verify_api.py`.
+
+## Acceptance criteria
+- [ ] File `verify_api.py` exists at the project root (same directory as `main.py` and `requirements.txt`).
+- [ ] Inspect `verify_api.py`: defines `if __name__ == "__main__":`, uses `TestClient`, uses explicit `if`/`sys.exit(1)` failure paths (no reliance on bare `assert` for the required checks), and prints the exact success token `ALL_CHECKS_PASSED` on success.
+- [ ] With cwd at project root: create or reuse a venv under `.rtw/runs/20260321_084849/tmp` (e.g. `.venv`), activate it, run `pip install -r requirements.txt`, then run `python verify_api.py`: **exit code 0** and stdout contains a line exactly `ALL_CHECKS_PASSED`.
+
+
+# Changed files (paths)
+
+
+# File contents
+(no files)
+
+# Iteration 3 of 10
+Outputs: edit `.rtw/runs/20260321_084849/SUBTASK.md`.
+Add a section with the exact heading `## Review` (that line only — not `## Review section` or similar).
+Update `.rtw/runs/20260321_084849/state.json` (preserve other keys).

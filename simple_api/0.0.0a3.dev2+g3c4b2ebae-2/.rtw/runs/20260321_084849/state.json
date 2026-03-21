@@ -1,0 +1,13 @@
+{
+  "workspace": "/Users/joeylou/sandbox/projects/ready-to-work/examples/simple_api/0.0.0a3.dev2+g3c4b2ebae-2",
+  "run_dir": ".rtw/runs/20260321_084849",
+  "run_tmp_dir": ".rtw/runs/20260321_084849/tmp",
+  "status": "COMPLETED",
+  "plan_status": "COMPLETED",
+  "subtask_status": "PASSED",
+  "current_iteration": 4,
+  "max_iterations": 10,
+  "blocking_reason": null,
+  "files_changed": [],
+  "updated_at": "2026-03-21T08:53:01.196950"
+}

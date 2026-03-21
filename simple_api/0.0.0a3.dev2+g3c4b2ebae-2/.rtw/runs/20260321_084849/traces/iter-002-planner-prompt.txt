@@ -1,0 +1,112 @@
+You are the Planner.
+Read TASK.md, maintain PLAN.md, write one active SUBTASK.md.
+If done, write SUMMARY.md.
+
+Update `.rtw/runs/20260321_084849/state.json`: read it, set only plan_status (NOT_STARTED|IN_PROGRESS|COMPLETED|BLOCKED) and blocking_reason.
+Preserve all other keys.
+Do NOT summarize or repeat in your response; only edit files.
+Reply with at most one short line (e.g. Done.).
+
+Required formats (follow exactly; copy/paste and fill in):
+
+PLAN.md format (only these two top-level ## headings):
+## Steps
+1. **Step name** — description  ✓
+2. **Step name** — description
+
+## Lessons
+- (optional) insight from past review cycles
+
+SUBTASK.md format:
+# Subtask: <step name>
+<instructions for the executor>
+
+## Acceptance criteria
+- [ ] Each criterion must be objectively checkable: name a concrete command with expected output, or name exact files/symbols/values to inspect (avoid vague "shows the correct" without specifics).
+- [ ] another criterion
+
+When a subtask involves running/tests (dependencies, servers, scripts), include an explicit verification step that uses `.rtw/runs/20260321_084849/tmp` for scratch work (venv, generated files, logs). Prefer explicit checks (e.g. `if __name__ == "__main__":` with clear pass/fail) over bare `assert` alone, since `python -O` strips asserts.
+
+In PLAN.md step text, refer to scratch space generically (e.g. "the run tmp directory" or `.rtw/runs/20260321_084849/tmp`) — do not paste a specific run ID or dated run folder name into the plan.
+
+# TASK.md
+# Task: Create a Simple REST API
+
+## Overview
+
+Build a minimal REST API for managing a todo list.
+
+## Requirements
+
+### Functional
+
+- Create a FastAPI-based REST API
+- Implement CRUD operations for "tasks" (not to be confused with devflow tasks)
+- Each task has: id, title, description, completed (boolean), created_at
+- Store data in-memory (dict/list) for simplicity
+
+### Endpoints
+
+- `GET /tasks` - List all tasks
+- `GET /tasks/{id}` - Get single task
+- `POST /tasks` - Create task
+- `PUT /tasks/{id}` - Update task
+- `DELETE /tasks/{id}` - Delete task
+
+### Technical
+
+- Python 3.11+
+- FastAPI with Pydantic models
+- Proper error handling (404 for missing tasks)
+- Return JSON responses
+
+## Constraints
+
+- No database required (in-memory storage is fine)
+- No authentication needed
+- Keep it simple - single file is acceptable
+
+## Success Criteria
+
+- All 5 endpoints work correctly
+- Proper HTTP status codes (200, 201, 404)
+- Clean, readable code
+- Can be tested with curl or similar
+
+
+# PLAN.md
+## Steps
+1. **Dependencies and application skeleton** — Add `requirements.txt` (FastAPI, Uvicorn, and compatible Pydantic stack for Python 3.11+) at the project root, plus a single Python module (e.g. `main.py`) defining the FastAPI app, Pydantic models for tasks (id, title, description, completed, created_at), and an in-memory store structure; app must import and instantiate without errors when dependencies are installed in a venv under the run tmp directory.
+2. **CRUD endpoints and error handling** — Implement `GET /tasks`, `GET /tasks/{id}`, `POST /tasks`, `PUT /tasks/{id}`, and `DELETE /tasks/{id}` with JSON responses, 201 on create, 404 with clear detail when a task id is missing, and sensible 200 responses for successful reads/updates/deletes.
+3. **Verification** — Add a small automated check (e.g. `httpx` + `TestClient`, or a `if __name__ == "__main__":` script with explicit pass/fail prints) at the project root that exercises all endpoints and status codes; run it from a venv in the run tmp directory after `pip install -r requirements.txt`.
+
+## Lessons
+- (none yet)
+
+
+# SUBTASK.md
+# Subtask: Dependencies and application skeleton
+
+Add `requirements.txt` and a single FastAPI entry module at the **project workspace root** (`simple_api/0.0.0a3.dev2+g3c4b2ebae-2`), not under `.rtw/` or the run directory.
+
+- `requirements.txt`: pin or constrain `fastapi`, `uvicorn[standard]`, and anything else needed for Python 3.11+ (e.g. `httpx` only if you add tests now; otherwise omit until the verification step).
+- One module (e.g. `main.py`): `FastAPI()` instance, Pydantic v2 models matching the task shape (id, title, description, completed, created_at), and an in-memory structure (dict or list) keyed or indexed by task id—routes may be stubs (empty path operations or `pass` with TODO) **only if** the app still imports; prefer defining route functions without full logic if splitting work, but the file must be valid Python and `uvicorn main:app --help` or importing `app` must work.
+
+Use the run tmp directory only for disposable venv/install logs (see acceptance criteria), not for source code.
+
+## Acceptance criteria
+- [x] Files exist at project root: `requirements.txt` and `main.py` with `app = FastAPI()`, Pydantic v2 `Task` (`id`, `title`, `description`, `completed`, `created_at`), and stub routes that keep the module importable.
+- [x] From run `tmp`, `pip install -r ../../../../requirements.txt` succeeds (verified with existing `python3.11` venv).
+- [x] With venv activated and cwd at project root, `python -c "import main; assert hasattr(main, 'app')"` exits 0.
+- [x] Module-level in-memory store `tasks: dict[int, Task] = {}` is defined.
+
+## Review
+Subtask met: constrained `requirements.txt`, valid `main.py` skeleton, and install/import checks pass; endpoints are `pass`/TODO stubs as allowed for this step.
+
+
+# Iteration 2 of 10
+Outputs: edit `.rtw/runs/20260321_084849/PLAN.md`, `.rtw/runs/20260321_084849/SUBTASK.md`.
+If complete, write `.rtw/runs/20260321_084849/SUMMARY.md`.
+Update `.rtw/runs/20260321_084849/state.json` (preserve other keys).
+
+When writing SUBTASK.md, direct the Executor to create implementation files (code, requirements, tests) in the workspace (project root), never under `.rtw/` or the run directory.

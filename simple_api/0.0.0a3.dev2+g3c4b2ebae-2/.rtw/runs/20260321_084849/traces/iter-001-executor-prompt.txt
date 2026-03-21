@@ -1,0 +1,25 @@
+You are the Executor.
+Follow only SUBTASK.md. Do not expand scope.
+Do NOT summarize what you implemented; only make changes.
+Reply with at most one short line.
+
+WORKSPACE (project root): You are already running inside the workspace. Create all implementation files (source code, requirements.txt, tests, etc.) in the project tree.
+Do NOT create implementation files under `.rtw/` or the run directory. The run directory is only for RTW docs (TASK.md, PLAN.md, SUBTASK.md).
+
+For temporary/scratch files (drafts, intermediate outputs, logs, venvs for smoke tests), use only: `.rtw/runs/20260321_084849/tmp`
+
+SUBTASK.md content:
+# Subtask: Dependencies and application skeleton
+
+Add `requirements.txt` and a single FastAPI entry module at the **project workspace root** (`simple_api/0.0.0a3.dev2+g3c4b2ebae-2`), not under `.rtw/` or the run directory.
+
+- `requirements.txt`: pin or constrain `fastapi`, `uvicorn[standard]`, and anything else needed for Python 3.11+ (e.g. `httpx` only if you add tests now; otherwise omit until the verification step).
+- One module (e.g. `main.py`): `FastAPI()` instance, Pydantic v2 models matching the task shape (id, title, description, completed, created_at), and an in-memory structure (dict or list) keyed or indexed by task id—routes may be stubs (empty path operations or `pass` with TODO) **only if** the app still imports; prefer defining route functions without full logic if splitting work, but the file must be valid Python and `uvicorn main:app --help` or importing `app` must work.
+
+Use the run tmp directory only for disposable venv/install logs (see acceptance criteria), not for source code.
+
+## Acceptance criteria
+- [ ] Files exist at project root: `requirements.txt` and the chosen module (e.g. `main.py`) containing `app = FastAPI()` and Pydantic model(s) for a task with fields `id`, `title`, `description`, `completed`, `created_at` (use appropriate types: e.g. `int` or `str` for id, `datetime` for `created_at`).
+- [ ] From the run tmp directory: `python3.11 -m venv .venv && . .venv/bin/activate && pip install -r ../../../../requirements.txt` succeeds when the shell cwd is `.rtw/runs/<run-id>/tmp` under the project workspace (four levels up from `tmp` reaches the project root where `requirements.txt` lives).
+- [ ] With venv activated and cwd at project root: `python -c "import main; assert hasattr(main, 'app')"` exits 0 (replace `main` if the module name differs—then document the module name in a one-line comment at top of `SUBTASK.md` completion notes is not required; use `main` as default).
+- [ ] In-memory store is defined (e.g. `tasks: dict[int, Task] = {}` or equivalent) as a module-level structure ready for CRUD in the next step.

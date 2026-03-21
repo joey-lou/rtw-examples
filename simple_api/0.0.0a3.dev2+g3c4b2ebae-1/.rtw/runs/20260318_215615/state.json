@@ -1,0 +1,13 @@
+{
+  "workspace": "/Users/joeylou/sandbox/projects/ready-to-work/examples/simple_api/0.0.0a3.dev2+g3c4b2ebae-1",
+  "run_dir": "/Users/joeylou/sandbox/projects/ready-to-work/examples/simple_api/0.0.0a3.dev2+g3c4b2ebae-1/.rtw/runs/20260318_215615",
+  "run_tmp_dir": "/Users/joeylou/sandbox/projects/ready-to-work/examples/simple_api/0.0.0a3.dev2+g3c4b2ebae-1/.rtw/runs/20260318_215615/tmp",
+  "status": "COMPLETED",
+  "plan_status": "COMPLETED",
+  "subtask_status": "PASSED",
+  "current_iteration": 3,
+  "max_iterations": 10,
+  "blocking_reason": null,
+  "files_changed": [],
+  "updated_at": "2026-03-18T22:14:33.909842"
+}

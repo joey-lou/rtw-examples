@@ -64,7 +64,7 @@ if [[ -z "$RTW_VERSION" ]]; then
 fi
 
 # Pick run directory: <version>, <version>-1, <version>-2, ...
-RUN_DIR="${EXAMPLE_DIR}/runs/${RTW_VERSION}"
+RUN_DIR="${EXAMPLE_DIR}/${RTW_VERSION}"
 if [[ -d "$RUN_DIR" ]]; then
     SUFFIX=1
     while [[ -d "${RUN_DIR}-${SUFFIX}" ]]; do
@@ -85,7 +85,7 @@ echo "║  Extra args: ${RTW_ARGS[*]:-}"
 echo "╚══════════════════════════════════════════╝"
 echo ""
 
-$RTW_CMD run "$TASK_FILE" -w "$RUN_DIR" "${RTW_ARGS[@]}"
+$RTW_CMD -w "$RUN_DIR" run "$TASK_FILE" "${RTW_ARGS[@]}"
 EXIT_CODE=$?
 
 echo ""

@@ -1,0 +1,120 @@
+You are the Reviewer.
+Review work against SUBTASK.md.
+Update SUBTASK.md with findings.
+
+Update `.rtw/runs/20260318_215615/state.json`: read it, set only subtask_status (REVISE|PASSED|BLOCKED) and blocking_reason.
+Preserve all other keys.
+Do NOT summarize or repeat in your response; only edit files.
+Reply with at most one short line.
+
+Required SUBTASK.md post-review shape (follow exactly; copy/paste and fill in):
+
+## Acceptance criteria
+- [x] criterion met
+- [ ] criterion failed — one-line reason
+
+## Review
+Brief findings.
+
+# TASK.md
+# Task: Create a Simple REST API
+
+## Overview
+
+Build a minimal REST API for managing a todo list.
+
+## Requirements
+
+### Functional
+
+- Create a FastAPI-based REST API
+- Implement CRUD operations for "tasks" (not to be confused with devflow tasks)
+- Each task has: id, title, description, completed (boolean), created_at
+- Store data in-memory (dict/list) for simplicity
+
+### Endpoints
+
+- `GET /tasks` - List all tasks
+- `GET /tasks/{id}` - Get single task
+- `POST /tasks` - Create task
+- `PUT /tasks/{id}` - Update task
+- `DELETE /tasks/{id}` - Delete task
+
+### Technical
+
+- Python 3.11+
+- FastAPI with Pydantic models
+- Proper error handling (404 for missing tasks)
+- Return JSON responses
+
+## Constraints
+
+- No database required (in-memory storage is fine)
+- No authentication needed
+- Keep it simple - single file is acceptable
+
+## Success Criteria
+
+- All 5 endpoints work correctly
+- Proper HTTP status codes (200, 201, 404)
+- Clean, readable code
+- Can be tested with curl or similar
+
+
+# PLAN.md
+## Steps
+1. **Scaffold FastAPI app, models, and in-memory storage** — create `main.py` with the FastAPI app, Pydantic task models, module-level in-memory store, and route definitions for all endpoints (may be stubbed). ✓
+2. **Implement GET/POST endpoints** — implement `GET /tasks` and `POST /tasks` with correct response payloads and status codes (200/201). ✓
+3. **Implement remaining endpoints + 404 handling** — implement `GET /tasks/{id}`, `PUT /tasks/{id}`, and `DELETE /tasks/{id}` with 404 for missing tasks and correct status codes. ✓
+4. **Add verification (curl/pytest)** — add a small verification routine (curl script and/or pytest) that exercises all endpoints and captures logs under `.rtw/runs/20260318_215615/tmp`. ✓
+
+## Lessons
+- Start by matching the repository runner convention: generate code in the workspace root (alongside `main.py`/`requirements.txt`), while keeping `.rtw/` strictly for metadata and run artifacts.
+
+
+# SUBTASK.md
+# Subtask: Scaffold FastAPI app, models, and in-memory storage
+Implement the initial FastAPI scaffolding in the workspace root (do not create anything under `.rtw/`).
+
+## Instructions for the Executor
+- In the current workspace root (`simple_api/<version>/`), create `main.py`.
+- Add a `FastAPI()` app instance named `app`.
+- Define Pydantic models matching the task schema:
+  - `TaskBase` (title, description, completed)
+  - `TaskCreate` (input model for `POST`/`PUT`)
+  - `TaskOut` (id, title, description, completed, created_at)
+- Use in-memory storage at module level:
+  - A dict mapping `id -> TaskOut` (or equivalent internal representation)
+  - A simple integer ID generator (e.g., incrementing counter)
+- Define all 5 endpoints with correct paths and method decorators:
+  - `GET /tasks`
+  - `GET /tasks/{id}`
+  - `POST /tasks`
+  - `PUT /tasks/{id}`
+  - `DELETE /tasks/{id}`
+- For any endpoint logic not yet implemented, it must fail explicitly with a clear `HTTPException(status_code=501)` (so the API contract and routing are still verifiable).
+- Ensure timestamps use `datetime` and serialize to JSON automatically (FastAPI/Pydantic).
+
+## Explicit verification (scratch work required)
+- Run a small Python verification command after implementation that:
+  - imports `app` from `main.py`
+  - confirms the existence of all required routes
+  - writes the route summary to `.rtw/runs/20260318_215615/tmp/step1_routes.txt`
+- Example command shape (adjust as needed):
+  - `python -c "from main import app; ...; open('.rtw/runs/20260318_215615/tmp/step1_routes.txt','w').write(...)" `
+
+## Acceptance criteria
+- [ ] `python -c "from main import app; ..."` runs successfully and creates `.rtw/runs/20260318_215615/tmp/step1_routes.txt` listing all 5 endpoints/routes
+- [ ] Reading `main.py` shows the correct Pydantic models (`TaskCreate`, `TaskOut`) and an in-memory dict store with an integer ID generator
+
+
+# Changed files (paths)
+
+
+# File contents
+(no files)
+
+# Iteration 1 of 10
+Outputs: edit `.rtw/runs/20260318_215615/SUBTASK.md`.
+Add a section with the exact heading `## Review` (that line only — not `## Review section` or similar).
+Update `.rtw/runs/20260318_215615/state.json` (preserve other keys).

@@ -1,0 +1,112 @@
+You are the Reviewer.
+Review work against SUBTASK.md.
+Update SUBTASK.md with findings.
+
+Update `.rtw/runs/20260318_215615/state.json`: read it, set only subtask_status (REVISE|PASSED|BLOCKED) and blocking_reason.
+Preserve all other keys.
+Do NOT summarize or repeat in your response; only edit files.
+Reply with at most one short line.
+
+Required SUBTASK.md post-review shape (follow exactly; copy/paste and fill in):
+
+## Acceptance criteria
+- [x] criterion met
+- [ ] criterion failed — one-line reason
+
+## Review
+Brief findings.
+
+# TASK.md
+# Task: Create a Simple REST API
+
+## Overview
+
+Build a minimal REST API for managing a todo list.
+
+## Requirements
+
+### Functional
+
+- Create a FastAPI-based REST API
+- Implement CRUD operations for "tasks" (not to be confused with devflow tasks)
+- Each task has: id, title, description, completed (boolean), created_at
+- Store data in-memory (dict/list) for simplicity
+
+### Endpoints
+
+- `GET /tasks` - List all tasks
+- `GET /tasks/{id}` - Get single task
+- `POST /tasks` - Create task
+- `PUT /tasks/{id}` - Update task
+- `DELETE /tasks/{id}` - Delete task
+
+### Technical
+
+- Python 3.11+
+- FastAPI with Pydantic models
+- Proper error handling (404 for missing tasks)
+- Return JSON responses
+
+## Constraints
+
+- No database required (in-memory storage is fine)
+- No authentication needed
+- Keep it simple - single file is acceptable
+
+## Success Criteria
+
+- All 5 endpoints work correctly
+- Proper HTTP status codes (200, 201, 404)
+- Clean, readable code
+- Can be tested with curl or similar
+
+
+# PLAN.md
+## Steps
+1. **Scaffold FastAPI app, models, and in-memory storage** — create `main.py` with the FastAPI app, Pydantic task models, module-level in-memory store, and route definitions for all endpoints (may be stubbed). ✓
+2. **Implement GET/POST endpoints** — implement `GET /tasks` and `POST /tasks` with correct response payloads and status codes (200/201). ✓
+3. **Implement remaining endpoints + 404 handling** — implement `GET /tasks/{id}`, `PUT /tasks/{id}`, and `DELETE /tasks/{id}` with 404 for missing tasks and correct status codes. ✓
+4. **Add verification (curl/pytest)** — add a small verification routine (curl script and/or pytest) that exercises all endpoints and captures logs under `.rtw/runs/20260318_215615/tmp`.
+
+## Lessons
+- Start by matching the repository runner convention: generate code in the workspace root (alongside `main.py`/`requirements.txt`), while keeping `.rtw/` strictly for metadata and run artifacts.
+
+
+# SUBTASK.md
+# Subtask: Add verification (curl/pytest)
+Implement endpoint verification for all CRUD routes using a small Python script that exercises the FastAPI app via `fastapi.testclient.TestClient`.
+
+Write the script as a scratch artifact under `.rtw/runs/20260318_215615/tmp/verify_api.py`. The script must:
+- Import `app` from `main.py` (workspace root).
+- Call, in order, and assert the expected HTTP status codes:
+  - `GET /tasks` (expect `200`)
+  - `POST /tasks` with `title`/`description`/`completed` (expect `201`, capture `id`)
+  - `GET /tasks/{id}` (expect `200`, validate response fields: `id`, `title`, `description`, `completed`, `created_at`)
+  - `PUT /tasks/{id}` updating `completed` (expect `200`)
+  - `DELETE /tasks/{id}` (expect `200`)
+  - `GET /tasks/{id}` after delete (expect `404`)
+- Write outputs into the same tmp directory:
+  - `.rtw/runs/20260318_215615/tmp/verification_report.json`
+  - `.rtw/runs/20260318_215615/tmp/verification.log`
+- Exit non-zero if any assertion fails.
+
+Explicit verification command (run from the workspace root `simple_api/<version>/`):
+```sh
+python .rtw/runs/20260318_215615/tmp/verify_api.py
+```
+
+## Acceptance criteria
+- [ ] Running `python .rtw/runs/20260318_215615/tmp/verify_api.py` exits `0` and creates `.rtw/runs/20260318_215615/tmp/verification_report.json` containing `status_codes` and `created_task`
+- [ ] The report confirms the expected status codes: `200, 201, 200, 200, 200, 404` for the sequence `GET /tasks`, `POST /tasks`, `GET /tasks/{id}`, `PUT /tasks/{id}`, `DELETE /tasks/{id}`, `GET /tasks/{id}` after delete
+
+
+# Changed files (paths)
+
+
+# File contents
+(no files)
+
+# Iteration 2 of 10
+Outputs: edit `.rtw/runs/20260318_215615/SUBTASK.md`.
+Add a section with the exact heading `## Review` (that line only — not `## Review section` or similar).
+Update `.rtw/runs/20260318_215615/state.json` (preserve other keys).

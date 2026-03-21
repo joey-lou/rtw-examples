@@ -1,0 +1,26 @@
+{
+  "workspace": "/Users/joeylou/sandbox/projects/ready-to-work/examples/simple_api/0.0.0a3.dev2+g3c4b2ebae",
+  "run_dir": "/Users/joeylou/sandbox/projects/ready-to-work/examples/simple_api/0.0.0a3.dev2+g3c4b2ebae/.rtw/runs/20260318_214253",
+  "run_tmp_dir": "/Users/joeylou/sandbox/projects/ready-to-work/examples/simple_api/0.0.0a3.dev2+g3c4b2ebae/.rtw/runs/20260318_214253/tmp",
+  "status": "FAILED",
+  "plan_status": "IN_PROGRESS",
+  "subtask_status": "NEEDS_REVIEW",
+  "current_iteration": 1,
+  "max_iterations": 10,
+  "blocking_reason": "Node 'Reviewer' failed: embedded null byte",
+  "files_changed": [
+    {
+      "path": "__pycache__/main.cpython-314.pyc",
+      "action": "added"
+    },
+    {
+      "path": "main.py",
+      "action": "added"
+    },
+    {
+      "path": "requirements.txt",
+      "action": "added"
+    }
+  ],
+  "updated_at": "2026-03-18T21:46:49.746584"
+}
